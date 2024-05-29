@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="OpenCart" verbose="4" thread-count="1" parallel="tests">
+	<listeners>
+		<listener class-name="in.footempire.listeners.AllureListener" />
+		<listener class-name="in.footempire.listeners.AnnotationTransformer" />
+	</listeners>
+	<test name = "BrandPage Test">
+		<classes>
+			<class name="in.footempire.base.BaseTest" />
+		</classes>
+	</test> <!-- Test -->
+</suite> <!-- Suite -->

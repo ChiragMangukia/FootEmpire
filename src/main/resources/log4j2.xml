@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<Appenders>
+		<RollingFile name="File" fileName="Logs/logger.log"
+			filePattern="Logs/logger-%d{yyyy-MM-dd}.log">
+			<PatternLayout
+				pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36}.%M - %msg%n" />
+			<SizeBasedTriggeringPolicy size="10MB" />
+		</RollingFile>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Logger name="io.netty" level="OFF">
+			<AppenderRef ref="File" />
+		</Logger>
+		<Root level="DEBUG">
+			<AppenderRef ref="File" />
+		</Root>
+	</Loggers>
+</Configuration>
