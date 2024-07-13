@@ -66,6 +66,23 @@ public class Utilities extends DriverFactory {
 		return prop;
 	}
 
+	public static Properties getProperty() {
+		Properties prop = new Properties();
+		String path = null;
+
+		FileInputStream ip = null;
+
+		path = "./src/test/resources/config/config.properties";
+
+        try {
+            ip = new FileInputStream(path);
+			prop.load(ip);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+		return prop;
+    }
+
 	public static void checkAndCreateFolder(String folderPath) {
 		File file = new File(folderPath);
 		if (!file.exists()) {

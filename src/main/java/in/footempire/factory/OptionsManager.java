@@ -32,6 +32,7 @@ public class OptionsManager {
 			chrome.addArguments("--headless");
 		if (Boolean.parseBoolean(prop.getProperty("incognito")))
 			chrome.addArguments("--incognito");
+		chrome.addArguments("--remote-allow-origins=*");
 		return chrome;
 	}
 

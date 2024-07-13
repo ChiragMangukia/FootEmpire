@@ -4,12 +4,14 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.beust.ah.A;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -26,6 +28,10 @@ public class ElementUtil {
 
 	public WebElement doGetElement(By by) {
 		return driver.findElement(by);
+	}
+
+	public WebElement goGetElementFromParentElement(WebElement parent, By child) {
+		return parent.findElement(child);
 	}
 
 	public List<WebElement> doGetElements(By by) {
@@ -165,5 +171,19 @@ public class ElementUtil {
 			}
 		}
 		return isPresent;
+	}
+
+	public void doNavigate(String url) {
+		driver.navigate().to(url);
+	}
+
+	public void doClickWithActions(By by) {
+		Actions actions = new Actions(driver);
+		actions.moveToElement(doGetElement(by)).click().perform();
+	}
+
+	public void doMoveToElement(By by) {
+		Actions actions = new Actions(driver);
+		actions.moveToElement(doGetElement(by)).perform();
 	}
 }

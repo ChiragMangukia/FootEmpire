@@ -7,6 +7,8 @@ import java.util.Properties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import in.footempire.utils.Browser;
@@ -17,7 +19,6 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 public class DriverFactory {
 
 	protected static WebDriver driver;
-	private static ThreadLocal<WebDriver> tlDriver = new ThreadLocal<>();
 	private static Logger log = LogManager.getLogger(DriverFactory.class);
 
 	OptionsManager optionsManager;
@@ -31,8 +32,8 @@ public class DriverFactory {
 				initRemoteDriver(Browser.CHROME);
 				log.info("Chrome RemoteDriver initiated");
 			} else {
-				tlDriver.set(
-						WebDriverManager.chromedriver().capabilities(optionsManager.getChromeOptions()).create());
+				WebDriverManager.chromedriver().setup();
+				driver = new ChromeDriver(optionsManager.getChromeOptions());
 				log.info("ChromeDriver initiated");
 			}
 		} else if (browser.equalsIgnoreCase(Browser.FIREFOX)) {
@@ -40,38 +41,31 @@ public class DriverFactory {
 				initRemoteDriver(Browser.FIREFOX);
 				log.info("Firefox RemoteDriver initiated");
 			} else {
-				tlDriver.set(
-						WebDriverManager.firefoxdriver().capabilities(optionsManager.getFirefoxOptions()).create());
+				WebDriverManager.firefoxdriver().setup();
+				driver = new FirefoxDriver(optionsManager.getFirefoxOptions());
 				log.info("FirefoxDriver initiated");
 			}
 		}
-		getDriver().manage().deleteAllCookies();
-		getDriver().manage().window().maximize();
-		getDriver().get(prop.getProperty("url").trim());
-		return getDriver();
+		driver.manage().deleteAllCookies();
+		driver.manage().window().maximize();
+		driver.get(prop.getProperty("url"));
+		return driver;
 	}
 
 	private void initRemoteDriver(String browserName) {
 		prop = Utilities.getProp();
 		if (browserName.equalsIgnoreCase(Browser.CHROME)) {
 			try {
-				tlDriver.set(
-						new RemoteWebDriver(new URL(prop.getProperty("huburl")), optionsManager.getChromeOptions()));
+						new RemoteWebDriver(new URL(prop.getProperty("huburl")), optionsManager.getChromeOptions());
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
 		} else if (browserName.equalsIgnoreCase(Browser.FIREFOX)) {
 			try {
-				tlDriver.set(
-						new RemoteWebDriver(new URL(prop.getProperty("huburl")), optionsManager.getFirefoxOptions()));
+						new RemoteWebDriver(new URL(prop.getProperty("huburl")), optionsManager.getFirefoxOptions());
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	private static synchronized WebDriver getDriver() {
-		driver = tlDriver.get();
-		return driver;
 	}
 }
